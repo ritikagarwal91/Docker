@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+        mysqlos:
+            image: mysql:5.7
+            volumes:
+                    - mysql_storage_compose:/var/lib/mysql
+            restart: always
+            environment:
+                    MYSQL_ROOT_PASSWORD: rootpass
+                    MYSQL_USER: ritik
+                    MYSQL_PASSWORD: redhat
+                    MYSQL_DATABASE: wordpress
+
+        wordpressos:
+                image: wordpress:5.1.1-php7.3-apache
+                restart: always
+                depends_on:
+                        - mysqlos
+                ports:
+                    - "8082:80"
+                volumes:
+                        - wp_storage_compose:/var/www/html
+                environment:
+                        WORDPRESS_DB_HOST: mysqlos
+                        WORDPRESS_DB_USER: ritik
+                        WORDPRESS_DB_PASSWORD: redhat
+                        WORDPRESS_DB_NAME: wordpress
+
+volumes:
+        mysql_storage_compose:
+        wp_storage_compose:
